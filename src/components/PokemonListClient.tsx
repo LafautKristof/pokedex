@@ -1,6 +1,6 @@
 "use client";
 
-import { PokemonRes, Pokedex as PokedexType } from "@/app/types/types";
+import { PokemonRes, Pokedex as PokedexType } from "@/app/types/PokemonTypes";
 
 import { useEffect, useState } from "react";
 import PokemonCard from "./PokemonCard";

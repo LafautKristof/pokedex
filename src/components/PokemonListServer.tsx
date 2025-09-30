@@ -1,5 +1,5 @@
 // Server component
-import { Pokedex, PokemonRes } from "@/app/types/types";
+import { Pokedex, PokemonRes } from "@/app/types/PokemonTypes";
 import PokemonListClient from "./PokemonListClient";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
@@ -17,7 +17,7 @@ export default async function PokemonListServer() {
         next: { tags: ["pokedex"] },
     });
     const pokedex: Pokedex[] = await resPokedex.json();
-    console.log("pokedex in servercompontent", pokedex);
+
     return (
         <PokemonListClient
             initialPokemons={pokemons}

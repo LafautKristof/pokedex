@@ -1,13 +1,10 @@
-import { getServerSession } from "next-auth";
-import { authOptions } from "../api/auth/[...nextauth]/route";
-import { redirect } from "next/navigation";
+import PokedexHome from "@/components/Pokedex/PokedexHome";
 
-const page = async () => {
-    const session = await getServerSession(authOptions);
-    if (!session) {
-        redirect("/login"); // 👈 geen JSON return hier
-    }
-
-    return <div>je bent op de pokedex beland</div>;
+const page = () => {
+    return (
+        <div>
+            <PokedexHome />
+        </div>
+    );
 };
 export default page;

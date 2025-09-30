@@ -5,3 +5,14 @@ https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/o
 =>sprites=>other=>official-artwork=>front_default
 https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/1.gif
 =>sprites=>other=>showdown=>front_default
+
+
+            {pokemon && <PokedexPicture pokemon={pokemon} />}
+                            {stone && <PokedexPicture stone={stone} />}
+                            {berries && <PokedexPicture berries={berries} />}
+                            {pokeball && <PokedexPicture pokeball={pokeball} />}
+                            {type && <PokedexPicture type={type} />}
+                            {medicine && <PokedexPicture medicine={medicine} />}
+                            {heldItems && (
+                                <PokedexPicture heldItems={heldItems} />
+                            )}

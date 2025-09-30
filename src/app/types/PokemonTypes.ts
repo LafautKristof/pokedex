@@ -4,11 +4,17 @@ export type PokemonRes = {
     data: Data;
     species: Species;
     evolution_chain: EvolutionChain;
+    type_relations: TypeRelation[];
 };
 
 export type Data = {
     sprites: Sprites;
     types: Types[];
+    height: number;
+    weight: number;
+    stats: { base_stat: number; stat: { name: string } }[];
+    base_experience: number;
+    abilities: { ability: { name: string }; is_hidden: boolean }[];
 };
 
 export type Sprites = {
@@ -53,11 +59,25 @@ export type Species = {
     color: { name: string; url: string };
     generation: { name: string; url: string };
     habitat?: { name: string; url: string } | null;
+    flavor_text_entries: { flavor_text: string; language: { name: string } }[];
 };
 
 export type Pokedex = {
-    _id: string;
     userId: string;
     pokemonId: number;
     caughtAt: Date;
+};
+
+export type TypeRelation = {
+    name: string;
+    damage_relations: DamageRelations;
+};
+
+export type DamageRelations = {
+    double_damage_from: { name: string; url: string }[];
+    double_damage_to: { name: string; url: string }[];
+    half_damage_from: { name: string; url: string }[];
+    half_damage_to: { name: string; url: string }[];
+    no_damage_from: { name: string; url: string }[];
+    no_damage_to: { name: string; url: string }[];
 };

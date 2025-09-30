@@ -1,5 +1,5 @@
 // Server component
-import { Pokedex, PokemonRes } from "@/app/types/types";
+import { Pokedex, PokemonRes } from "@/app/types/PokemonTypes";
 import PokemonListClient from "./PokemonListClient";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
@@ -16,11 +16,11 @@ export default async function PokedexListServer() {
 
     const resPokedex = await fetch(`http://localhost:3000/api/pokedex`, {
         next: { tags: ["pokedex"] },
+        cache: "no-store",
     });
     const pokedex: Pokedex[] = await resPokedex.json();
-    console.log("pokedex in servercompontent", pokedex);
-    const idSet = new Set(pokedex.map((i) => i.pokemonId));
 
+    const idSet = new Set(pokedex.map((i) => i.pokemonId));
     const filteredPokemons = pokemons.filter((p) => idSet.has(p.apiId));
     return (
         <PokedexListClient

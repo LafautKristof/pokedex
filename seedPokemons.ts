@@ -9,9 +9,11 @@ async function fetchJson(url: string) {
 }
 
 async function main() {
+    console.log("🚀 Seeding gestart...");
     const MONGODB_URI = process.env.MONGODB_URI!;
-
+    console.log("🔌 Verbinden met MongoDB:", MONGODB_URI);
     await mongoose.connect(MONGODB_URI);
+    console.log("✅ Verbonden met MongoDB");
 
     const res = await fetch(
         "https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0"
@@ -28,15 +30,18 @@ async function main() {
         const details = await Promise.all(
             batch.map((p: any) => fetchJson(p.url))
         );
+        console.log(
+            `⚡ Batch ${i / batchSize + 1}: ${batch[0].name} ... ${
+                batch[batch.length - 1].name
+            }`
+        );
 
         for (const detail of details) {
             try {
-                // species ophalen
                 const species = await fetchJson(
                     `https://pokeapi.co/api/v2/pokemon-species/${detail.id}/`
                 );
 
-                // evolutieketen ophalen
                 let evolution_chain = null;
                 if (species.evolution_chain?.url) {
                     evolution_chain = await fetchJson(
@@ -44,18 +49,31 @@ async function main() {
                     );
                 }
 
-                // opslaan in MongoDB
+                // 🆕 type-effectiveness ophalen
+                const typeRelations = [];
+                for (const t of detail.types) {
+                    const typeData = await fetchJson(t.type.url);
+                    typeRelations.push({
+                        name: t.type.name,
+                        damage_relations: typeData.damage_relations,
+                    });
+                }
+
                 await Pokemon.updateOne(
                     { apiId: detail.id },
                     {
-                        apiId: detail.id,
-                        name: detail.name,
-                        data: detail,
-                        species: species,
-                        evolution_chain: evolution_chain,
+                        $set: {
+                            apiId: detail.id,
+                            name: detail.name,
+                            data: detail,
+                            species: species,
+                            evolution_chain: evolution_chain,
+                            type_relations: typeRelations,
+                        },
                     },
                     { upsert: true }
                 );
+                console.log(`✅ ${detail.name} (id: ${detail.id}) opgeslagen`);
             } catch (err) {
                 console.error(`❌ Fout bij ${detail.name}`, err);
             }

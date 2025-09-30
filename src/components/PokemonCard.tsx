@@ -1,7 +1,7 @@
 "use client";
 import { catchPokemon, releasePokemon } from "@/app/actions/pokedex";
 import { getTypeBadgeColor } from "@/app/helpers/typeColors";
-import { PokemonRes } from "@/app/types/types";
+import { PokemonRes } from "@/app/types/PokemonTypes";
 import Link from "next/link";
 import Image from "next/image";
 import PokemonButton from "./PokemonButton";
@@ -16,12 +16,11 @@ const PokemonCard = ({
     caught: boolean;
     userId?: string | null;
 }) => {
-    console.log("userId in pokemoncard", typeof userId);
     return (
         <>
             <div className="bg-gray-300 rounded-xl shadow p-4 flex flex-col items-center aspect-[7/10] w-full border-4 border-gray-400 hover:cursor-pointer hover:animate-pulse">
                 <div>
-                    <Link href={`/pokemon/${pokemon.name}`}>
+                    <Link href={`/pokedex/pokemon/${pokemon.apiId}`}>
                         <Image
                             src={getSprite(pokemon)}
                             alt={pokemon.name}
@@ -33,7 +32,7 @@ const PokemonCard = ({
                         {pokemon.name}
                     </span>
 
-                    <div className="flex gap-2 mt-2">
+                    <div className="flex gap-2 mt-2 mb-8">
                         {pokemon.data.types.map((t) => (
                             <span
                                 key={t.type.name}

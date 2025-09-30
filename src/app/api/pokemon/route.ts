@@ -9,7 +9,7 @@ export async function GET(req: Request) {
     const page = parseInt(searchParams.get("page") || "1");
     const limit = parseInt(searchParams.get("limit") || "20");
     const skip = (page - 1) * limit;
-    console.log("page", page, "limit", limit, "skip", skip);
+    console.log("page", page, "limit", limit, "skip", skip); // 👈 debug
     const pokemons = await getAllPokemon({ limit, skip });
 
     return NextResponse.json(pokemons);

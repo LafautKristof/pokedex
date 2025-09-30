@@ -1,5 +1,5 @@
 import PokemonSchema from "@/app/models/Pokemon";
-import { PokemonRes } from "../types/types";
+import { PokemonRes } from "../types/PokemonTypes";
 
 export const getAllPokemon = async ({
     skip,

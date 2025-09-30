@@ -6,6 +6,7 @@ const PokemonSchema = new mongoose.Schema({
     data: Object, // volledige /pokemon data
     species: Object, // /pokemon-species data
     evolution_chain: Object, // /evolution-chain data
+    type_relations: Array,
 });
 
 export default mongoose.models.Pokemon ||

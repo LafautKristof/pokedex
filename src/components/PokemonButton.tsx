@@ -8,8 +8,6 @@ import RollingPokeball from "./RollingPokeball";
 import WobblingPokeball from "./WobblingPokeball";
 const PokemonButton = ({ text, caught }: { text: string; caught: boolean }) => {
     const { pending } = useFormStatus();
-    console.log("text", text);
-    console.log("pending", pending);
 
     // <Image
     //     src="/pngfind.com-pokeball-icon-png-1587026.png"

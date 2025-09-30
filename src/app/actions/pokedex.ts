@@ -6,10 +6,10 @@ import {
     countUserPokemons,
     removeFromPokedex,
 } from "@/app/queries/pokedex";
+import Pokemon from "../models/Pokemon";
 
 export async function catchPokemon(fd: FormData) {
     try {
-        console.log("catchPokemon");
         const pokemon = parseInt(fd.get("id") as string);
         const userId = fd.get("userId") as string;
 

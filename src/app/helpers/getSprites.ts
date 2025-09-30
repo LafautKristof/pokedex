@@ -1,4 +1,4 @@
-import { PokemonRes } from "../types/types";
+import { PokemonRes } from "../types/PokemonTypes";
 
 export function getSprite(pokemon: PokemonRes): string {
     return (
