@@ -26,10 +26,10 @@ export default async function PokemonListServer() {
         caughtAt: new Date(doc.caughtAt ?? Date.now()),
     }));
 
-    const resPokemons = await fetch(
-        `http://localhost:3000/api/pokemon?page=1&limit=20`,
-        { next: { tags: ["pokemon"] }, cache: "force-cache" }
-    );
+    const resPokemons = await fetch(`/api/pokemon?page=1&limit=20`, {
+        next: { tags: ["pokemon"] },
+        cache: "force-cache",
+    });
     const pokemons: PokemonRes[] = await resPokemons.json();
     return (
         <PokemonListClient

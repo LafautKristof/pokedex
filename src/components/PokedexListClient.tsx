@@ -8,8 +8,6 @@ const PokedexListClient = async ({ pokedex }: { pokedex: PokedexType[] }) => {
     const ids = pokedex.map((p) => Number(p.pokemonId));
     const myPokemons = await getMyPokemonsInfo(ids);
 
-    console.log("pokedex", pokedex);
-    console.log("myPokemons", myPokemons);
     return (
         <>
             <div className="w-full sticky top-0 z-10 bg-gray-200 flex flex-wrap gap-[1vw] justify-around items-center">
