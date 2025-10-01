@@ -6,17 +6,16 @@ import { Menu, X } from "lucide-react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import LogoutButton from "./LogoutButton";
+import { useSession } from "next-auth/react";
 
 export default function Navbar() {
     const [open, setOpen] = useState(false);
+    const { data: session } = useSession();
 
     const links = [
         { href: "/", label: "Home" },
         { href: "/pokedex", label: "Pokédex" },
-        { href: "/favorites", label: "Favorieten" },
         { href: "/about", label: "Over" },
-        { href: "/login", label: "Login" },
-        { href: "/register", label: "Registreren" },
     ];
 
     return (
@@ -71,7 +70,7 @@ export default function Navbar() {
                         </Link>
 
                         {/* Desktop links */}
-                        <div className="hidden md:flex space-x-6">
+                        <div className="hidden md:flex space-x-6 items-center">
                             {links.map((link) => (
                                 <Link
                                     key={link.href}
@@ -81,7 +80,25 @@ export default function Navbar() {
                                     {link.label}
                                 </Link>
                             ))}
-                            <LogoutButton />
+
+                            {session ? (
+                                <LogoutButton />
+                            ) : (
+                                <>
+                                    <Link
+                                        href="/login"
+                                        className="hover:text-yellow-300 transition"
+                                    >
+                                        Login
+                                    </Link>
+                                    <Link
+                                        href="/register"
+                                        className="hover:text-yellow-300 transition"
+                                    >
+                                        Registreren
+                                    </Link>
+                                </>
+                            )}
                         </div>
 
                         {/* Mobile menu button */}
@@ -107,6 +124,27 @@ export default function Navbar() {
                                 {link.label}
                             </Link>
                         ))}
+
+                        {session ? (
+                            <LogoutButton />
+                        ) : (
+                            <>
+                                <Link
+                                    href="/login"
+                                    className="block py-2 hover:text-yellow-300 transition"
+                                    onClick={() => setOpen(false)}
+                                >
+                                    Login
+                                </Link>
+                                <Link
+                                    href="/register"
+                                    className="block py-2 hover:text-yellow-300 transition"
+                                    onClick={() => setOpen(false)}
+                                >
+                                    Registreren
+                                </Link>
+                            </>
+                        )}
                     </div>
                 )}
             </motion.nav>

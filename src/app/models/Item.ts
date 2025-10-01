@@ -3,9 +3,9 @@ import mongoose, { Schema, Document } from "mongoose";
 export interface ItemDoc extends Document {
     apiId: number;
     name: string;
-    category: string; // bv. "medicine", "berry", "pokeball"
-    pocket: string; // bv. "berries", "medicine", "balls"
-    data: any;
+    category: string;
+    pocket: string;
+    data: Record<string, unknown>;
 }
 
 const ItemSchema = new Schema<ItemDoc>({

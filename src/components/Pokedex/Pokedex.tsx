@@ -5,8 +5,11 @@ import PokedexShell from "../PokedexShell";
 import { PokemonRes } from "@/app/types/PokemonTypes";
 import { TypeBadge } from "../TypeBadge";
 import { EvolutionNode, EvolutionNodeType } from "../EvolutionNode";
-import { useRouter } from "next/navigation";
-import { ItemsRes } from "@/app/types/ItemsTypes";
+import {
+    EffectEntries,
+    FlavorTextEntries,
+    ItemsRes,
+} from "@/app/types/ItemsTypes";
 import { TypeRes } from "@/app/types/TypeTypes";
 
 import { typeColors, typeIcons } from "@/app/helpers/typeIcons";
@@ -14,15 +17,21 @@ import Link from "next/link";
 import { getPastelColor } from "@/app/helpers/pastelColor";
 import { formatText } from "@/app/helpers/formatText";
 import Image from "next/image";
+import { catchPokemon, releasePokemon } from "@/app/actions/pokedex";
+import PokemonButton from "../PokemonButton";
 
 export default function Pokedex({
     pokemon,
     items,
     type,
+    caught = false,
+    userId,
 }: {
     pokemon?: PokemonRes;
     items?: ItemsRes;
     type?: TypeRes;
+    caught?: boolean;
+    userId?: string | null;
 }) {
     const [viewPokemon, setViewPokemon] = useState<
         "base" | "stats" | "evolving" | "effectiveness"
@@ -40,10 +49,10 @@ export default function Pokedex({
     const currentIndexType = viewsType.indexOf(viewType);
 
     function getIdFromUrl(url: string): string {
-        const parts = url.split("/").filter(Boolean); // filtert lege stukjes
-        return parts[parts.length - 1]; // laatste stuk = id
+        const parts = url.split("/").filter(Boolean);
+        return parts[parts.length - 1];
     }
-    console.log("items", items);
+
     return (
         <PokedexShell
             showHint={false}
@@ -69,7 +78,6 @@ export default function Pokedex({
         >
             <div className="relative w-full h-full flex flex-col">
                 <div className="flex-1 overflow-y-auto pb-24">
-                    {/* BASE VIEW */}
                     {pokemon && (
                         <>
                             {viewPokemon === "base" && (
@@ -92,7 +100,6 @@ export default function Pokedex({
                                             />
                                         </div>
 
-                                        {/* Info + types */}
                                         <div className="mt-2 text-xs text-gray-700 grid grid-cols-2 gap-4">
                                             <div className="space-y-1 pt-2 font-pokemon">
                                                 <div className="flex justify-start">
@@ -145,10 +152,30 @@ export default function Pokedex({
                                     <h1 className="font-pokemon text-3xl text-center">
                                         {pokemon.name}
                                     </h1>
+                                    {userId && (
+                                        <form
+                                            action={
+                                                caught
+                                                    ? releasePokemon
+                                                    : catchPokemon
+                                            }
+                                        >
+                                            <input
+                                                type="hidden"
+                                                name="id"
+                                                value={pokemon.apiId}
+                                            />
+                                            <input
+                                                type="hidden"
+                                                name="userId"
+                                                value={userId}
+                                            />
+                                            <PokemonButton caught={caught} />
+                                        </form>
+                                    )}
                                 </div>
                             )}
 
-                            {/* STATS VIEW */}
                             {viewPokemon === "stats" && (
                                 <div className="flex-1 flex flex-col items-center p-4 font-pokemon">
                                     <h2 className="text-xl font-bold mb-4">
@@ -185,7 +212,7 @@ export default function Pokedex({
                                     </ul>
                                 </div>
                             )}
-                            {/* EVOLVING VIEW */}
+
                             {viewPokemon === "evolving" && (
                                 <div className="flex flex-col items-center gap-6 p-6 font-pokemon overflow-hidden">
                                     <h2 className="text-xl font-bold">
@@ -221,9 +248,7 @@ export default function Pokedex({
                                                             pokemon.type_relations.flatMap(
                                                                 (tr) =>
                                                                     tr.damage_relations.double_damage_from.map(
-                                                                        (
-                                                                            t: any
-                                                                        ) =>
+                                                                        (t) =>
                                                                             t.name
                                                                     )
                                                             )
@@ -247,9 +272,7 @@ export default function Pokedex({
                                                             pokemon.type_relations.flatMap(
                                                                 (tr) =>
                                                                     tr.damage_relations.double_damage_to.map(
-                                                                        (
-                                                                            t: any
-                                                                        ) =>
+                                                                        (t) =>
                                                                             t.name
                                                                     )
                                                             )
@@ -273,9 +296,7 @@ export default function Pokedex({
                                                             pokemon.type_relations.flatMap(
                                                                 (tr) =>
                                                                     tr.damage_relations.no_damage_from.map(
-                                                                        (
-                                                                            t: any
-                                                                        ) =>
+                                                                        (t) =>
                                                                             t.name
                                                                     )
                                                             )
@@ -299,9 +320,7 @@ export default function Pokedex({
                                                             pokemon.type_relations.flatMap(
                                                                 (tr) =>
                                                                     tr.damage_relations.no_damage_to.map(
-                                                                        (
-                                                                            t: any
-                                                                        ) =>
+                                                                        (t) =>
                                                                             t.name
                                                                     )
                                                             )
@@ -407,39 +426,55 @@ export default function Pokedex({
                                             (entry) =>
                                                 entry.language.name === "en"
                                         )
-                                        .map((entry: any, idx: number) => (
-                                            <div
-                                                key={idx}
-                                                className="text-sm text-gray-800 space-y-1"
-                                            >
-                                                <div className="flex flex-col items-center justify-center text-center font-pokemon">
-                                                    <p className="font-semibold align-middle">
-                                                        Effect:{" "}
-                                                    </p>
-                                                    <p>{entry.effect}</p>
+                                        .map(
+                                            (
+                                                entry: EffectEntries,
+                                                idx: number
+                                            ) => (
+                                                <div
+                                                    key={idx}
+                                                    className="text-sm text-gray-800 space-y-1"
+                                                >
+                                                    <div className="flex flex-col items-center justify-center text-center font-pokemon">
+                                                        <p className="font-semibold align-middle">
+                                                            Effect:{" "}
+                                                        </p>
+                                                        <p>{entry.effect}</p>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        ))}
+                                            )
+                                        )}
                                     {items.data.flavor_text_entries
                                         .filter(
                                             (entry) =>
                                                 entry.language.name === "en"
                                         )
-                                        .slice(0, 1) // neem de eerste Engelse entry
-                                        .map((entry: any, idx: number) => (
-                                            <p
-                                                key={idx}
-                                                className="italic text-gray-600 text-sm pt-4 font-pokemon text-center"
-                                            >
-                                                {formatText(
-                                                    entry.text
-                                                        .replace(/\f/g, " ")
-                                                        .replace(/\u00ad/g, "")
-                                                        .replace(/\s+/g, " ")
-                                                        .trim()
-                                                )}
-                                            </p>
-                                        ))}
+                                        .slice(0, 1)
+                                        .map(
+                                            (
+                                                entry: FlavorTextEntries,
+                                                idx: number
+                                            ) => (
+                                                <p
+                                                    key={idx}
+                                                    className="italic text-gray-600 text-sm pt-4 font-pokemon text-center"
+                                                >
+                                                    {formatText(
+                                                        entry.flavor_text
+                                                            .replace(/\f/g, " ")
+                                                            .replace(
+                                                                /\u00ad/g,
+                                                                ""
+                                                            )
+                                                            .replace(
+                                                                /\s+/g,
+                                                                " "
+                                                            )
+                                                            .trim()
+                                                    )}
+                                                </p>
+                                            )
+                                        )}
                                 </div>
                             </div>
                         </div>

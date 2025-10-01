@@ -17,6 +17,7 @@ export default function PokedexHome() {
         | "searchPokemon"
         | "searchTypes"
         | "searchItems"
+        | "myParty"
     >("main");
 
     const menus: Record<string, MenuOption[]> = {
@@ -24,6 +25,7 @@ export default function PokedexHome() {
             { label: "Pokémon", action: () => setMenuLevel("pokemon") },
             { label: "Items", action: () => setMenuLevel("items") },
             { label: "Types", action: () => setMenuLevel("types") },
+            { label: "My Party", action: () => setMenuLevel("myParty") },
         ],
         pokemon: [
             {
@@ -63,15 +65,17 @@ export default function PokedexHome() {
             { label: "By ID", href: "/pokedex/type/search?search=id" },
             { label: "By Name", href: "/pokedex/type/search?search=name" },
         ],
+        myParty: [
+            { label: "View Party", href: "/pokedex/party" },
+            { label: "Back", action: () => setMenuLevel("main") },
+        ],
     };
 
     const options = menus[menuLevel];
 
-    // Splits de back knop van de rest
     const normalOptions = options.filter((o) => o.label !== "Back");
     const backOption = options.find((o) => o.label === "Back");
 
-    // Keyboard controls
     useEffect(() => {
         function handleKeyDown(e: KeyboardEvent) {
             if (e.key === "ArrowUp") {
@@ -98,7 +102,6 @@ export default function PokedexHome() {
     return (
         <PokedexShell>
             <div className="flex flex-col justify-between h-full">
-                {/* Bovenste opties */}
                 <div className="flex flex-col gap-4">
                     {normalOptions.map((opt, idx) => (
                         <div
@@ -119,7 +122,6 @@ export default function PokedexHome() {
                     ))}
                 </div>
 
-                {/* Back knop rechtsonder */}
                 {backOption && (
                     <div className="flex justify-end mt-6">
                         <div

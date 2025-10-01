@@ -63,9 +63,11 @@ export type Species = {
 };
 
 export type Pokedex = {
+    _id?: string;
     userId: string;
     pokemonId: number;
     caughtAt: Date;
+    __v?: number;
 };
 
 export type TypeRelation = {

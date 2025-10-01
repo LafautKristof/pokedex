@@ -23,7 +23,7 @@ export default function Page() {
             const existingIds = new Set(prev.map((p) => p.apiId));
             const newOnes = data.filter((p) => !existingIds.has(p.apiId));
             return [...prev, ...newOnes];
-        }); // voeg toe aan bestaande lijst
+        });
         setLoading(false);
     }
 
@@ -54,9 +54,9 @@ export default function Page() {
                                                 item?.data?.sprites?.[
                                                     "default"
                                                 ] ?? "/next.svg"
-                                            } // 👈 we gebruiken nu .image i.p.v. ["default"]
+                                            }
                                             alt={item.name}
-                                            width={96} // verplicht bij <Image /> (of gebruik fill)
+                                            width={96}
                                             height={96}
                                             className="object-contain drop-shadow-lg"
                                             style={{

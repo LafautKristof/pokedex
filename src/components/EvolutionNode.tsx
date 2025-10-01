@@ -15,7 +15,6 @@ export type EvolutionDetail = {
     min_level: number | null;
     trigger: { name: string; url: string };
     item: { name: string; url: string } | null;
-    // je kan hier uitbreiden met alle velden uit de API
 };
 
 export type EvolutionNodeType = {
@@ -28,7 +27,6 @@ export function EvolutionNode({ node }: { node: EvolutionNodeType }) {
 
     return (
         <div className="flex flex-row items-start gap-4">
-            {/* Huidige Pokémon met link */}
             <Link
                 href={`/pokedex/pokemon/${id}`}
                 className="flex flex-col items-center hover:scale-105 transition"
@@ -39,7 +37,7 @@ export function EvolutionNode({ node }: { node: EvolutionNodeType }) {
                         alt={node.species.name}
                         fill
                         className="object-contain"
-                        priority={false} // lazy load (optioneel, kan weg)
+                        priority={false}
                     />
                 </div>
                 <span className="capitalize text-sm mt-1 font-pokemon">
@@ -47,7 +45,6 @@ export function EvolutionNode({ node }: { node: EvolutionNodeType }) {
                 </span>
             </Link>
 
-            {/* Kinderen (evoluties) */}
             {node.evolves_to?.length > 0 && (
                 <div className="flex flex-col gap-6">
                     {node.evolves_to.map((child) => (

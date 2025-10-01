@@ -3,9 +3,9 @@ import mongoose from "mongoose";
 const PokemonSchema = new mongoose.Schema({
     apiId: { type: Number, unique: true },
     name: String,
-    data: Object, // volledige /pokemon data
-    species: Object, // /pokemon-species data
-    evolution_chain: Object, // /evolution-chain data
+    data: Object,
+    species: Object,
+    evolution_chain: Object,
     type_relations: Array,
 });
 

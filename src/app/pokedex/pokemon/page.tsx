@@ -23,14 +23,14 @@ export default function Page() {
             const existingIds = new Set(prev.map((p) => p.apiId));
             const newOnes = data.filter((p) => !existingIds.has(p.apiId));
             return [...prev, ...newOnes];
-        }); // voeg toe aan bestaande lijst
+        });
         setLoading(false);
     }
 
     useEffect(() => {
         fetchPokemons(page);
     }, [page]);
-    console.log("Fetching page", page);
+
     return (
         <PokedexShell showHint={false} showBack>
             <div className="relative w-full h-full flex flex-col overflow-x-hidden">

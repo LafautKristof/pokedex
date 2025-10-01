@@ -16,11 +16,10 @@ const page = async () => {
     return (
         <PokedexShell showHint={false} showBack>
             <div className="relative w-full h-full flex flex-col">
-                {/* haal overflow-y-auto hier weg */}
                 <div className="flex-1 pb-24">
                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 mb-20">
                         {Array.isArray(types) &&
-                            types.map((type, index) => (
+                            types.map((type) => (
                                 <Link
                                     key={type.apiId}
                                     href={`/pokedex/type/${type.apiId}`}

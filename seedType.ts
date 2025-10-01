@@ -1,4 +1,3 @@
-// seedType.ts
 import mongoose from "mongoose";
 import "dotenv/config";
 import Type from "./src/app/models/Type";
@@ -23,7 +22,7 @@ async function main() {
             const detail = await fetchJson(type.url);
 
             await Type.updateOne(
-                { apiId: Number(detail.id) }, // match altijd op Number
+                { apiId: Number(detail.id) },
                 {
                     apiId: Number(detail.id),
                     name: detail.name,
@@ -41,7 +40,6 @@ async function main() {
         }
     }
 
-    // Log alle types om te checken
     const all = await Type.find({}, { apiId: 1, name: 1 });
     console.log("🎯 Alle types in DB:", all);
 

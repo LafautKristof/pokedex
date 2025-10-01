@@ -101,7 +101,6 @@ async function seedItems() {
     );
 
     for (const category of categories.results) {
-        // eventueel skippen wat je niet wil
         if (["picky-healing"].includes(category.name)) continue;
 
         console.log(`📂 Ophalen categorie: ${category.name}`);
@@ -133,7 +132,6 @@ async function seedItems() {
     }
 }
 
-// Seed Types
 async function seedTypes() {
     console.log("🌱 Seeden van Types...");
     const res = await fetchJson("https://pokeapi.co/api/v2/type");

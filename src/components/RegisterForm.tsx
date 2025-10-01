@@ -17,7 +17,7 @@ const RegisterForm = () => {
             },
             body: JSON.stringify({ email, password, name }),
         });
-        const data = await res.json();
+
         if (res.ok) {
             alert("Registration successful");
             setEmail("");

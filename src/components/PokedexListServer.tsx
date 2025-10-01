@@ -1,32 +1,23 @@
 // Server component
-import { Pokedex, PokemonRes } from "@/app/types/PokemonTypes";
-import PokemonListClient from "./PokemonListClient";
+import { Pokedex as PokedexType } from "@/app/types/PokemonTypes";
+
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import PokedexListClient from "./PokedexListClient";
+import { connectDB } from "@/app/lib/mongo";
+import Pokedex from "@/app/models/Pokedex";
 
 export default async function PokedexListServer() {
     const session = await getServerSession(authOptions);
+    if (!session?.user?.id) {
+        return <p>Je bent niet ingelogd</p>;
+    }
 
-    const resPokemons = await fetch(
-        `http://localhost:3000/api/pokemon?page=1&limit=20`,
-        { next: { tags: ["pokemon"] }, cache: "force-cache" }
-    );
-    const pokemons: PokemonRes[] = await resPokemons.json();
+    await connectDB();
 
-    const resPokedex = await fetch(`http://localhost:3000/api/pokedex`, {
-        next: { tags: ["pokedex"] },
-        cache: "no-store",
-    });
-    const pokedex: Pokedex[] = await resPokedex.json();
+    const pokedex = (await Pokedex.find({
+        userId: session.user.id,
+    }).lean()) as PokedexType[];
 
-    const idSet = new Set(pokedex.map((i) => i.pokemonId));
-    const filteredPokemons = pokemons.filter((p) => idSet.has(p.apiId));
-    return (
-        <PokedexListClient
-            initialPokemons={filteredPokemons}
-            pokedex={pokedex}
-            userId={session?.user?.id ?? null}
-        />
-    );
+    return <PokedexListClient pokedex={pokedex} />;
 }

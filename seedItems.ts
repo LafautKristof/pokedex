@@ -13,7 +13,6 @@ async function main() {
     await mongoose.connect(MONGODB_URI);
     console.log("🌱 Start seeden van Items...");
 
-    // Haal alle categorieën op (er zijn er 54)
     const categories = await fetchJson(
         "https://pokeapi.co/api/v2/item-category?limit=100"
     );
@@ -26,7 +25,6 @@ async function main() {
             try {
                 const detail = await fetchJson(item.url);
 
-                // pocket info ophalen
                 const pocketDetail = await fetchJson(
                     detail.category.url.replace("item-category", "item-pocket")
                 ).catch(() => null);
@@ -52,7 +50,7 @@ async function main() {
             }
         }
 
-        await new Promise((r) => setTimeout(r, 500)); // kleine pauze
+        await new Promise((r) => setTimeout(r, 500));
     }
 
     await mongoose.disconnect();

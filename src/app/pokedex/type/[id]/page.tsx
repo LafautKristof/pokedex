@@ -11,29 +11,22 @@ type TypeDoc = TypeRes & {
 export default async function Page({ params }: { params: { id: string } }) {
     await connectDB();
 
-    // params.id → number
     const id = parseInt(params.id, 10);
     if (isNaN(id)) return null;
 
-    // 🔑 Gewone findOne (apiId is nu number in DB)
-    const rawType = await Type.findOne({ apiId: params.id }).lean<TypeDoc>();
-
-    console.log("params.id (raw)", params.id, typeof params.id);
-    console.log("DB apiId voorbeeld:", (await Type.findOne()).apiId);
+    const rawType = await Type.findOne({ apiId: id })
+        .select("-_id -__v")
+        .lean<TypeDoc>();
 
     if (!rawType) {
-        console.log("Geen type gevonden voor id:", id);
         return null;
     }
 
-    // Schoonmaken
-    const { _id, __v, ...rest } = rawType;
-    const type: TypeRes = rest;
-    const cleanType: TypeRes = JSON.parse(JSON.stringify(rest));
+    const type: TypeRes = rawType;
 
     return (
         <div className="p-8 flex flex-col justify-start items-center border-4 rounded-xl border-gray-400">
-            {type && <Pokedex type={cleanType} />}
+            {type && <Pokedex type={type} />}
         </div>
     );
 }

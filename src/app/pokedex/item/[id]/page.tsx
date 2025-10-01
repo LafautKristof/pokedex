@@ -11,15 +11,16 @@ type ItemDoc = ItemsRes & {
 export default async function Page({ params }: { params: { id: string } }) {
     await connectDB();
 
-    const id = parseInt(params.id, 10); // 👈 id string → nummer
+    const id = parseInt(params.id, 10);
 
     if (isNaN(id)) return null;
 
-    const rawItem = await Item.findOne({ apiId: id }).lean<ItemDoc>();
+    const rawItem = await Item.findOne({ apiId: id })
+        .select("-_id -__v")
+        .lean<ItemDoc>();
     if (!rawItem) return null;
 
-    const { _id, __v, ...rest } = rawItem;
-    const item: ItemsRes = rest;
+    const item: ItemsRes = rawItem;
 
     return (
         <div className="p-8 flex flex-col justify-start items-center border-4 rounded-full border-gray-400">

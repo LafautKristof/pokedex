@@ -1,6 +1,7 @@
 // components/PokedexShell.tsx
 "use client";
 
+import { releaseAllPokemon } from "@/app/actions/pokedex";
 import Link from "next/link";
 
 type Props = {
@@ -12,6 +13,8 @@ type Props = {
     nextHref?: string;
     onBack?: () => void;
     onNext?: () => void;
+    release?: boolean;
+    userId?: string;
 };
 
 export default function PokedexShell({
@@ -23,6 +26,8 @@ export default function PokedexShell({
     nextHref,
     onBack,
     onNext,
+    release,
+    userId,
 }: Props) {
     return (
         <div className="flex justify-center items-center min-h-screen bg-gradient-to-b from-red-600 to-red-800 p-8">
@@ -80,6 +85,18 @@ export default function PokedexShell({
                                 Next
                             </button>
                         ))}
+                    {release && (
+                        <form action={releaseAllPokemon}>
+                            <input
+                                type="hidden"
+                                name="userId"
+                                value={userId ?? ""}
+                            />
+                            <button className="px-6 py-2 bg-red-600 text-white font-pokemon rounded-full border-4 border-gray-900 shadow-md hover:bg-red-700 transition cursor-pointer">
+                                Release
+                            </button>
+                        </form>
+                    )}
                 </div>
             </div>
         </div>

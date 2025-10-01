@@ -20,13 +20,12 @@ async function main() {
     );
     const data = await res.json();
 
-    const pokemons = data.results.slice(0, 1010); // max 1010 pokémon
+    const pokemons = data.results.slice(0, 1010);
 
-    const batchSize = 20; // klein houden, want elke Pokémon = 3 requests
+    const batchSize = 20;
     for (let i = 0; i < pokemons.length; i += batchSize) {
         const batch = pokemons.slice(i, i + batchSize);
 
-        // basis info
         const details = await Promise.all(
             batch.map((p: any) => fetchJson(p.url))
         );
@@ -49,7 +48,6 @@ async function main() {
                     );
                 }
 
-                // 🆕 type-effectiveness ophalen
                 const typeRelations = [];
                 for (const t of detail.types) {
                     const typeData = await fetchJson(t.type.url);
@@ -79,7 +77,7 @@ async function main() {
             }
         }
 
-        await new Promise((r) => setTimeout(r, 1500)); // kleine pauze voor API
+        await new Promise((r) => setTimeout(r, 1500));
     }
 
     await mongoose.disconnect();

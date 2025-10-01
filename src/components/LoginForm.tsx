@@ -17,7 +17,7 @@ export default function LoginForm() {
         setLoading(true);
 
         const result = await signIn("credentials", {
-            redirect: false, // we doen zelf de redirect
+            redirect: false,
             email,
             password,
         });
@@ -27,7 +27,7 @@ export default function LoginForm() {
         if (result?.error) {
             setError("❌ Inloggen mislukt: " + result.error);
         } else {
-            router.push("/pokedex"); // of een andere pagina
+            router.push("/pokedex");
         }
     }
 
