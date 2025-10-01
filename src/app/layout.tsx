@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/NavBar";
 import localFont from "next/font/local";
 import Providers from "@/components/Providers";
+import Image from "next/image";
 const pokemonFont = localFont({
     src: "../fonts/pokemon.ttf",
     variable: "--font-pokemon",
@@ -23,7 +24,7 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body
-                className={`${pokemonFont.variable} bg-gradient-to-b from-yellow-400 to-red-600`}
+                className={`${pokemonFont.variable} bg-gradient-to-b from-yellow-400 to-red-600 relative`}
             >
                 <Providers>
                     <Navbar />

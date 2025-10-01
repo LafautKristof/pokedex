@@ -19,7 +19,7 @@ export default function Navbar() {
     ];
 
     return (
-        <div className="relative">
+        <div className="relative font-pokemon">
             <Image
                 src="/Pokemon.svg"
                 alt="Pokemon Logo"
