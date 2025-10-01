@@ -8,6 +8,9 @@ import Pokedex from "@/app/models/Pokedex";
 
 export default async function PokemonListServer() {
     const session = await getServerSession(authOptions);
+    const baseUrl =
+        process.env.NEXTAUTH_URL || // bv. http://localhost:3000 in dev
+        (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "");
 
     if (!session?.user?.id) {
         return <p>Je bent niet ingelogd</p>;
@@ -26,7 +29,7 @@ export default async function PokemonListServer() {
         caughtAt: new Date(doc.caughtAt ?? Date.now()),
     }));
 
-    const resPokemons = await fetch(`/api/pokemon?page=1&limit=20`, {
+    const resPokemons = await fetch(`${baseUrl}/api/pokemon?page=1&limit=20`, {
         next: { tags: ["pokemon"] },
         cache: "force-cache",
     });

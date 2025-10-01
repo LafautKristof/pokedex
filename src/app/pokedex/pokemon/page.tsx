@@ -12,12 +12,19 @@ export default function Page() {
     const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(false);
     const limit = 20;
-
+    const baseUrl =
+        process.env.NEXTAUTH_URL ||
+        (process.env.VERCEL_URL
+            ? `https://${process.env.VERCEL_URL}`
+            : "http://localhost:3000");
     async function fetchPokemons(page: number) {
         setLoading(true);
-        const res = await fetch(`/api/pokemon?page=${page}&limit=${limit}`, {
-            cache: "no-store",
-        });
+        const res = await fetch(
+            `${baseUrl}/api/pokemon?page=${page}&limit=${limit}`,
+            {
+                cache: "no-store",
+            }
+        );
         const data: PokemonRes[] = await res.json();
         setPokemons((prev) => {
             const existingIds = new Set(prev.map((p) => p.apiId));

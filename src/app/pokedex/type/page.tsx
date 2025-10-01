@@ -6,7 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 const page = async () => {
-    const resTypes = await fetch(`http://localhost:3000/api/type`, {
+    const resTypes = await fetch(`/api/type`, {
         next: { tags: ["types"] },
         cache: "no-store",
     });
