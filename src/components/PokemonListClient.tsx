@@ -16,7 +16,7 @@ const PokemonListClient = ({
     const [pokedexState, setPokedexState] = useState(pokedex);
     const [page, setPage] = useState(2);
     const [loading, setLoading] = useState(false);
-
+    const limitReached = pokedexState.length >= 10;
     const loadMore = useCallback(async () => {
         if (loading) return;
         setLoading(true);
@@ -76,6 +76,10 @@ const PokemonListClient = ({
                         setPokedexState((prev) =>
                             prev.filter((p) => p.pokemonId !== pokemon.apiId)
                         )
+                    }
+                    disableCatch={
+                        limitReached &&
+                        !pokedexState.some((p) => p.pokemonId === pokemon.apiId)
                     }
                 />
             ))}

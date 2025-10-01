@@ -12,17 +12,27 @@ const page = async () => {
     await connectDB();
 
     let pokemonCount = 0;
+    let message;
     if (session?.user?.id) {
         pokemonCount = await Pokedex.countDocuments({
             userId: session.user.id,
         });
+        if (pokemonCount === 0) {
+            message = "You haven’t caught any Pokémon yet!";
+        } else if (pokemonCount < 10) {
+            message = `You’ve caught ${pokemonCount} Pokémon so far. Keep going!`;
+        } else {
+            message = "You can’t catch more than 10 Pokémon right now!";
+        }
+    } else {
+        redirect("/login");
     }
 
     return (
         <>
             <PokedexListServer />
             <PokemonListServer />;
-            <ProfessorOakBalloon pokemonCount={pokemonCount} />
+            <ProfessorOakBalloon message={message} />
         </>
     );
 };

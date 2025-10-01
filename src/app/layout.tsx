@@ -5,6 +5,9 @@ import Navbar from "@/components/NavBar";
 import localFont from "next/font/local";
 import Providers from "@/components/Providers";
 import Image from "next/image";
+import FallingPsyduck from "@/components/Psyduck";
+import Ash from "@/components/Ash";
+
 const pokemonFont = localFont({
     src: "../fonts/pokemon.ttf",
     variable: "--font-pokemon",
@@ -23,12 +26,15 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-            <body
-                className={`${pokemonFont.variable} bg-gradient-to-b from-yellow-400 to-red-600 relative`}
-            >
+            <body className={`${pokemonFont.variable} bg-blue-300`}>
                 <Providers>
-                    <Navbar />
-                    {children}
+                    {" "}
+                    <Navbar />{" "}
+                    <div className="relative">
+                        <Ash />
+                        {children}
+                    </div>
+                    <FallingPsyduck />
                 </Providers>
             </body>
         </html>

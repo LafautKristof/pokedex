@@ -28,6 +28,13 @@ export default function Navbar() {
                 className="absolute -top-15 left-3/5 -translate-x-1/3 z-10"
                 priority
             />
+            <Image
+                src="/NicePng_kanto-badges-png_3680351.png"
+                alt="poks"
+                width={100}
+                height={100}
+                className="absolute -top-13 left-2/5 -translate-x-1/3 z-10"
+            />
             <motion.nav
                 className="bg-pink-400 text-white shadow-lg w-2xl mx-auto mt-35 rounded-3xl relative z-20"
                 animate={{ rotate: [0, -0.3, 0.3, 0] }}

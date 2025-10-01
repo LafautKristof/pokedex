@@ -14,6 +14,7 @@ type PokemonCardProps = {
     userId?: string | null;
     onCatch?: () => void;
     onRelease?: () => void;
+    disableCatch?: boolean;
 };
 
 const PokemonCard = ({
@@ -22,6 +23,7 @@ const PokemonCard = ({
     userId,
     onCatch,
     onRelease,
+    disableCatch,
 }: PokemonCardProps) => {
     return (
         <div
@@ -67,7 +69,7 @@ const PokemonCard = ({
             >
                 <input type="hidden" name="id" value={pokemon.apiId} />
                 <input type="hidden" name="userId" value={userId ?? ""} />
-                <PokemonButton caught={caught} />
+                <PokemonButton caught={caught} disabled={disableCatch} />
             </form>
             <div className="absolute flex top-2 right-2">
                 <p className="font-pokemon"> #{pokemon.apiId}</p>

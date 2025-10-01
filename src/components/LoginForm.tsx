@@ -43,9 +43,6 @@ export default function LoginPage() {
                     <h1 className="text-2xl font-pokemon text-gray-800">
                         Trainer Login
                     </h1>
-                    <p className="text-sm text-gray-600 font-pokemon text-center">
-                        Log in to catch, train and battle with your Pokémon!
-                    </p>
 
                     {/* Pokéball styled login buttons */}
                     <form
@@ -67,7 +64,7 @@ export default function LoginPage() {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
-                            className="p-3  border-2 border-gray-400 rounded-md 
+                            className="p-3 font-pokemon border-2 border-gray-400 rounded-md 
                                 focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-800"
                         />
                         <button

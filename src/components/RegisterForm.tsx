@@ -46,9 +46,6 @@ const RegisterForm = () => {
                     <h1 className="text-2xl font-pokemon text-gray-800">
                         Trainer Registration
                     </h1>
-                    <p className="text-sm text-gray-600 font-pokemon text-center">
-                        Create your account to start your Pokémon journey!
-                    </p>
 
                     <form onSubmit={handleSubmit} className="w-full space-y-4">
                         <input
