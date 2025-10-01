@@ -15,7 +15,7 @@ export default function Navbar() {
     const links = [
         { href: "/", label: "Home" },
         { href: "/pokedex", label: "Pokédex" },
-        { href: "/about", label: "Over" },
+        { href: "/about", label: "About" },
     ];
 
     return (

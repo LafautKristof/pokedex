@@ -1,20 +1,19 @@
 "use client";
 
 import { signIn } from "next-auth/react";
+import Image from "next/image";
+import PokedexShell from "./PokedexShell";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-export default function LoginForm() {
+export default function LoginPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
-    const [loading, setLoading] = useState(false);
     const router = useRouter();
-
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
         setError("");
-        setLoading(true);
 
         const result = await signIn("credentials", {
             redirect: false,
@@ -22,49 +21,77 @@ export default function LoginForm() {
             password,
         });
 
-        setLoading(false);
-
         if (result?.error) {
-            setError("❌ Inloggen mislukt: " + result.error);
+            setError("Invalid email or password");
         } else {
-            router.push("/pokedex");
+            router.push("/"); // naar homepage
         }
     }
-
     return (
-        <form
-            onSubmit={handleSubmit}
-            className="space-y-4 bg-white shadow p-6 rounded-xl max-w-md mx-auto"
-        >
-            <h1 className="text-2xl font-bold">Log in</h1>
+        <PokedexShell showHint={false}>
+            <div className="flex justify-center items-center min-h-screen bg-gradient-to-b">
+                <div className="bg-white border-8 border-gray-900 rounded-3xl shadow-2xl p-10 flex flex-col items-center  gap-6 w-[90%] max-w-md">
+                    {/* Logo */}
+                    <Image
+                        src="/International_Pokémon_logo.png"
+                        alt="Pokémon Logo"
+                        width={200}
+                        height={80}
+                        className="drop-shadow-lg"
+                    />
 
-            {error && <p className="text-red-500 text-sm">{error}</p>}
+                    <h1 className="text-2xl font-pokemon text-gray-800">
+                        Trainer Login
+                    </h1>
+                    <p className="text-sm text-gray-600 font-pokemon text-center">
+                        Log in to catch, train and battle with your Pokémon!
+                    </p>
 
-            <input
-                type="email"
-                placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="border p-2 rounded w-full"
-            />
+                    {/* Pokéball styled login buttons */}
+                    <form
+                        onSubmit={handleSubmit}
+                        className="flex flex-col gap-4 w-full"
+                    >
+                        <input
+                            type="email"
+                            placeholder="Trainer Email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                            className="p-3 font-pokemon border-2 border-gray-400 rounded-md 
+                                focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-800"
+                        />
+                        <input
+                            type="password"
+                            placeholder="Password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                            className="p-3  border-2 border-gray-400 rounded-md 
+                                focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-800"
+                        />
+                        <button
+                            type="submit"
+                            className="px-6 py-3 bg-red-600 text-white font-pokemon text-lg 
+                                rounded-full border-4 border-red-800 shadow-md 
+                                hover:bg-red-700 hover:scale-105 transition-transform"
+                        >
+                            Login
+                        </button>
+                    </form>
 
-            <input
-                type="password"
-                placeholder="Wachtwoord"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="border p-2 rounded w-full"
-            />
+                    {error && (
+                        <p className="text-red-600 font-pokemon mt-2">
+                            {error}
+                        </p>
+                    )}
 
-            <button
-                type="submit"
-                disabled={loading}
-                className="bg-blue-500 text-white px-4 py-2 rounded w-full hover:bg-blue-600 disabled:opacity-50"
-            >
-                {loading ? "Bezig met inloggen..." : "Inloggen"}
-            </button>
-        </form>
+                    <p className="mt-4 text-xs text-gray-500 font-pokemon italic">
+                        Don’t have an account? Register to become a Pokémon
+                        trainer!
+                    </p>
+                </div>
+            </div>
+        </PokedexShell>
     );
 }

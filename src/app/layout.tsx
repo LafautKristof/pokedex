@@ -22,7 +22,9 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-            <body className={`${pokemonFont.variable}`}>
+            <body
+                className={`${pokemonFont.variable} bg-gradient-to-b from-yellow-400 to-red-600`}
+            >
                 <Providers>
                     <Navbar />
                     {children}
