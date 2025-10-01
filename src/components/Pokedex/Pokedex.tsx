@@ -52,7 +52,7 @@ export default function Pokedex({
         const parts = url.split("/").filter(Boolean);
         return parts[parts.length - 1];
     }
-
+    console.log(pokemon?.type_relations);
     return (
         <PokedexShell
             showHint={false}

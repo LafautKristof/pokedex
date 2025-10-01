@@ -9,7 +9,7 @@ import Pokedex from "@/app/models/Pokedex";
 export default async function PokemonListServer() {
     const session = await getServerSession(authOptions);
     const baseUrl =
-        process.env.NEXTAUTH_URL || // bv. http://localhost:3000 in dev
+        process.env.NEXTAUTH_URL ||
         (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "");
 
     if (!session?.user?.id) {
