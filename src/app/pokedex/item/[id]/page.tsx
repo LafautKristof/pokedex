@@ -22,9 +22,5 @@ export default async function Page({ params }: { params: { id: string } }) {
 
     const item: ItemsRes = rawItem;
 
-    return (
-        <div className="p-8 flex flex-col justify-start items-center border-4 rounded-full border-gray-400">
-            {item && <Pokedex items={item} />}
-        </div>
-    );
+    return <Pokedex items={item} />;
 }

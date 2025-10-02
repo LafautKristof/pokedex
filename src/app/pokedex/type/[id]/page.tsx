@@ -13,20 +13,19 @@ export default async function Page({ params }: { params: { id: string } }) {
 
     const id = parseInt(params.id, 10);
     if (isNaN(id)) return null;
-
     const rawType = await Type.findOne({ apiId: id })
-        .select("-_id -__v")
+        .select("-__v")
         .lean<TypeDoc>();
 
-    if (!rawType) {
-        return null;
-    }
+    if (!rawType) return null;
 
-    const type: TypeRes = rawType;
-
-    return (
-        <div className="p-8 flex flex-col justify-start items-center border-4 rounded-xl border-gray-400">
-            {type && <Pokedex type={type} />}
-        </div>
-    );
+    const type: TypeRes = JSON.parse(JSON.stringify(rawType));
+    type.pokemon = type.pokemon.filter((p) => {
+        const urlId = parseInt(
+            p.url.split("/").filter(Boolean).pop() || "0",
+            10
+        );
+        return urlId <= 1010;
+    });
+    return <Pokedex type={type} />;
 }

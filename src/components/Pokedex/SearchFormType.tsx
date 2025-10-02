@@ -18,17 +18,21 @@ export default function SearchFormType() {
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
         if (!query.trim() || !mode) return;
-
+        const baseUrl =
+            process.env.NEXTAUTH_URL || // bv. http://localhost:3000 in dev
+            (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "");
         switch (mode) {
             case "id":
                 if (!isNaN(Number(query))) {
-                    router.push(`/pokedex/type/${query.trim()}`);
+                    router.push(`${baseUrl}/pokedex/type/${query.trim()}`);
                 }
                 break;
             case "name":
-                const res = await fetch(`/api/search/type?name=${query}`);
+                const res = await fetch(
+                    `${baseUrl}/api/search/type?name=${query}`
+                );
                 const data = await res.json();
-                setResults(data);
+                setResults(data.types);
                 break;
         }
     }

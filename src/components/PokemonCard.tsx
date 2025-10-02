@@ -28,7 +28,7 @@ const PokemonCard = ({
     return (
         <div
             className=" relative bg-gray-300 rounded-xl shadow p-4 flex flex-col justify-between items-center 
-                w-full border-4 border-gray-400 hover:cursor-pointer hover:animate-pulse min-h-[350px]"
+                w-full border-4 border-gray-400 hover:cursor-pointer hover:animate-pulse min-h-[350px] mb-5"
         >
             <div>
                 <Link href={`/pokedex/pokemon/${pokemon.apiId}`}>

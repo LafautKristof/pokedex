@@ -4,7 +4,7 @@ import { PokemonRes } from "@/app/types/PokemonTypes";
 import PokedexShell from "@/components/PokedexShell";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function SearchFormPokemon() {
     const router = useRouter();
@@ -13,24 +13,68 @@ export default function SearchFormPokemon() {
 
     const [query, setQuery] = useState("");
     const [results, setResults] = useState<PokemonRes[]>([]);
+    const [page, setPage] = useState(1);
+    const [hasMore, setHasMore] = useState(true);
+    const [loading, setLoading] = useState(false);
 
-    async function handleSubmit(e: React.FormEvent) {
+    const loaderRef = useRef<HTMLDivElement | null>(null);
+
+    async function fetchPage(pageNum: number) {
+        if (!query.trim() || !mode || loading || !hasMore) return;
+
+        setLoading(true);
+        const res = await fetch(
+            `/api/search/pokemon?name=${query}&page=${pageNum}&limit=50`
+        );
+        const data = await res.json();
+
+        if (pageNum === 1) {
+            // Eerste keer: vervang resultaten
+            setResults(data.pokemons);
+        } else {
+            // Volgende keren: append
+            setResults((prev) => [...prev, ...data.pokemons]);
+        }
+
+        setHasMore(data.hasMore);
+        setLoading(false);
+    }
+
+    function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
         if (!query.trim() || !mode) return;
 
-        switch (mode) {
-            case "id":
-                if (!isNaN(Number(query))) {
-                    router.push(`/pokedex/pokemon/${query.trim()}`);
-                }
-                break;
-            case "name":
-                const res = await fetch(`/api/search/pokemon?name=${query}`);
-                const data = await res.json();
-                setResults(data);
-                break;
+        if (mode === "id") {
+            if (!isNaN(Number(query))) {
+                router.push(`/pokedex/pokemon/${query.trim()}`);
+            }
+        } else if (mode === "name") {
+            setResults([]);
+            setPage(1);
+            setHasMore(true);
+            fetchPage(1); // eerste batch
         }
     }
+
+    // Observeer scroll
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (entries[0].isIntersecting && hasMore && !loading) {
+                    setPage((prev) => prev + 1);
+                }
+            },
+            { rootMargin: "200px" }
+        );
+
+        if (loaderRef.current) observer.observe(loaderRef.current);
+        return () => observer.disconnect();
+    }, [hasMore, loading]);
+
+    // elke keer als page ↑
+    useEffect(() => {
+        if (page > 1) fetchPage(page);
+    }, [page]);
 
     return (
         <PokedexShell showBack>
@@ -39,7 +83,6 @@ export default function SearchFormPokemon() {
                     Pokédex Search
                 </h1>
 
-                {/* Als er nog geen resultaten zijn → toon formulier */}
                 {results.length === 0 ? (
                     <>
                         <form
@@ -56,19 +99,17 @@ export default function SearchFormPokemon() {
                                 value={query}
                                 onChange={(e) => setQuery(e.target.value)}
                                 className="flex-1 p-3 font-pokemon border-2 border-gray-400 rounded-md 
-                           focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-800"
+                focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-800"
                             />
-
                             <button
                                 type="submit"
                                 className="px-6 py-3 bg-red-600 text-white font-pokemon text-lg 
-                           rounded-full border-4 border-red-800 shadow-md 
-                           hover:bg-red-700 hover:scale-105 transition-transform"
+                rounded-full border-4 border-red-800 shadow-md 
+                hover:bg-red-700 hover:scale-105 transition-transform"
                             >
                                 Go!
                             </button>
                         </form>
-
                         <p className="text-xs text-gray-600 font-pokemon italic">
                             {mode === "id" &&
                                 "🔎 Search by Pokémon National ID (1–1010)"}
@@ -77,12 +118,11 @@ export default function SearchFormPokemon() {
                         </p>
                     </>
                 ) : (
-                    // Resultaten weergave
                     <div className="bg-white border-4 border-gray-300 rounded-xl shadow-lg p-4 w-full max-w-lg flex flex-col">
                         <h2 className="text-lg font-pokemon mb-3 text-gray-800">
                             Results
                         </h2>
-                        <div className="flex-1   pr-2">
+                        <div className="flex-1 pr-2">
                             {results.map((p) => (
                                 <button
                                     key={p.apiId}
@@ -108,16 +148,32 @@ export default function SearchFormPokemon() {
                             ))}
                         </div>
 
-                        {/* Back knop */}
+                        {/* loader */}
+                        <div
+                            ref={loaderRef}
+                            className="h-12 flex items-center justify-center"
+                        >
+                            {loading && (
+                                <span className="font-pokemon">Loading…</span>
+                            )}
+                            {!hasMore && results.length > 0 && (
+                                <span className="font-pokemon">
+                                    ✅ All Pokémon loaded
+                                </span>
+                            )}
+                        </div>
+
                         <div className="mt-4 flex justify-center">
                             <button
                                 onClick={() => {
                                     setResults([]);
                                     setQuery("");
+                                    setPage(1);
+                                    setHasMore(true);
                                 }}
                                 className="px-4 py-2 bg-gray-200 text-gray-800 font-pokemon 
-                           rounded-md border-2 border-gray-400 
-                           hover:bg-gray-300 transition"
+                rounded-md border-2 border-gray-400 
+                hover:bg-gray-300 transition"
                             >
                                 ← Back to Search
                             </button>

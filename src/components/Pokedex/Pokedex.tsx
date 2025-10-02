@@ -52,7 +52,7 @@ export default function Pokedex({
         const parts = url.split("/").filter(Boolean);
         return parts[parts.length - 1];
     }
-    console.log(pokemon?.type_relations);
+
     return (
         <PokedexShell
             showHint={false}
@@ -368,15 +368,14 @@ export default function Pokedex({
                                     </>
                                 )}
                                 {viewType === "pokemon" && (
-                                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mb-20">
-                                        {type?.pokemon.slice(0, 20).map((p) => {
+                                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mb-20 ">
+                                        {type?.pokemon.map((p) => {
                                             const id = getIdFromUrl(p.url);
                                             return (
                                                 <div
                                                     key={p.name}
                                                     className="flex flex-col items-center"
                                                 >
-                                                    {" "}
                                                     <Link
                                                         href={`/pokedex/pokemon/${id}`}
                                                         className="capitalize text-sm font-pokemon"
@@ -410,7 +409,10 @@ export default function Pokedex({
                                 <div className="flex flex-col items-center">
                                     <div className="relative w-60 h-60">
                                         <Image
-                                            src={items.data.sprites.default}
+                                            src={
+                                                items.data.sprites.default ||
+                                                "/next.svg"
+                                            }
                                             alt={items.name}
                                             fill
                                             className="object-contain"
@@ -454,26 +456,34 @@ export default function Pokedex({
                                             (
                                                 entry: FlavorTextEntries,
                                                 idx: number
-                                            ) => (
-                                                <p
-                                                    key={idx}
-                                                    className="italic text-gray-600 text-sm pt-4 font-pokemon text-center"
-                                                >
-                                                    {formatText(
-                                                        entry.flavor_text
-                                                            .replace(/\f/g, " ")
-                                                            .replace(
-                                                                /\u00ad/g,
-                                                                ""
-                                                            )
-                                                            .replace(
-                                                                /\s+/g,
-                                                                " "
-                                                            )
-                                                            .trim()
-                                                    )}
-                                                </p>
-                                            )
+                                            ) => {
+                                                const safeText =
+                                                    entry.flavor_text
+                                                        ? entry.flavor_text
+                                                              .replace(
+                                                                  /\f/g,
+                                                                  " "
+                                                              )
+                                                              .replace(
+                                                                  /\u00ad/g,
+                                                                  ""
+                                                              )
+                                                              .replace(
+                                                                  /\s+/g,
+                                                                  " "
+                                                              )
+                                                              .trim()
+                                                        : "";
+
+                                                return (
+                                                    <p
+                                                        key={idx}
+                                                        className="italic text-gray-600 text-sm pt-4 font-pokemon text-center"
+                                                    >
+                                                        {formatText(safeText)}
+                                                    </p>
+                                                );
+                                            }
                                         )}
                                 </div>
                             </div>

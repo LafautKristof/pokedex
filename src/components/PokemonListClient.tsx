@@ -96,7 +96,7 @@ const PokemonListClient = ({
             {/* Loader sentinel */}
             <div
                 ref={loaderRef}
-                className="h-10 flex justify-center items-center"
+                className="h-10 flex justify-center items-center font-pokemon"
             >
                 {loading && <span>Loading more…</span>}
             </div>

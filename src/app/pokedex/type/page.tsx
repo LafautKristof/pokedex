@@ -6,7 +6,10 @@ import Image from "next/image";
 import Link from "next/link";
 
 const page = async () => {
-    const resTypes = await fetch(`/api/type`, {
+    const baseUrl =
+        process.env.NEXTAUTH_URL ||
+        (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "");
+    const resTypes = await fetch(`${baseUrl}/api/type`, {
         next: { tags: ["types"] },
         cache: "no-store",
     });

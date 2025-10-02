@@ -1,4 +1,5 @@
 export type TypeRes = {
+    _id: string;
     apiId: number;
     name: string;
     damage_relations: DamageRelations;

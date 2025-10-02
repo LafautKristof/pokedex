@@ -38,7 +38,7 @@ export default function Page() {
                     <div className=" grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mb-20">
                         {loading && items.length === 0 && (
                             <p className="text-center font-pokemon">
-                                Loading Pokémons...
+                                Loading items...
                             </p>
                         )}
                         {items &&
@@ -74,7 +74,7 @@ export default function Page() {
                             })}
                     </div>
 
-                    <div className="  flex justify-center mb-10">
+                    <div className=" font-pokemon flex justify-center mb-10">
                         <button
                             disabled={loading}
                             onClick={() => setPage((prev) => prev + 1)}

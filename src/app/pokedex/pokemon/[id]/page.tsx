@@ -32,15 +32,11 @@ export default async function Page({ params }: { params: { id: string } }) {
         const pokedexIds = entries.map((e) => Number(e.pokemonId));
         const caught = pokedexIds.includes(pokemon.apiId);
         return (
-            <div className="p-8 flex flex-col justify-start items-center border-4 rounded-full border-gray-400">
-                {pokemon && (
-                    <Pokedex
-                        pokemon={pokemon}
-                        caught={caught}
-                        userId={session.user.id}
-                    />
-                )}
-            </div>
+            <Pokedex
+                pokemon={pokemon}
+                caught={caught}
+                userId={session.user.id}
+            />
         );
     }
 }

@@ -3,9 +3,8 @@
 import { ItemsRes } from "@/app/types/ItemsTypes";
 import PokedexShell from "@/components/PokedexShell";
 import Image from "next/image";
-
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 
 export default function SearchFormItem() {
     const router = useRouter();
@@ -14,24 +13,64 @@ export default function SearchFormItem() {
 
     const [query, setQuery] = useState("");
     const [results, setResults] = useState<ItemsRes[]>([]);
+    const [page, setPage] = useState(1);
+    const [hasMore, setHasMore] = useState(true);
+    const [loading, setLoading] = useState(false);
 
-    async function handleSubmit(e: React.FormEvent) {
+    const loaderRef = useRef<HTMLDivElement | null>(null);
+
+    async function fetchPage(pageNum: number) {
+        if (!query.trim() || !mode || loading || !hasMore) return;
+
+        setLoading(true);
+        const res = await fetch(
+            `/api/search/item?name=${query}&page=${pageNum}&limit=20`
+        );
+        const data = await res.json();
+
+        setResults((prev) => [...prev, ...data.items]);
+        setHasMore(data.hasMore);
+        setLoading(false);
+    }
+
+    function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
+        const baseUrl =
+            process.env.NEXTAUTH_URL ||
+            (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "");
         if (!query.trim() || !mode) return;
-
-        switch (mode) {
-            case "id":
-                if (!isNaN(Number(query))) {
-                    router.push(`/pokedex/item/${query.trim()}`);
-                }
-                break;
-            case "name":
-                const res = await fetch(`/api/search/item?name=${query}`);
-                const data = await res.json();
-                setResults(data);
-                break;
+        if (mode === "id") {
+            if (!isNaN(Number(query))) {
+                router.push(`${baseUrl}/pokedex/item/${query.trim()}`);
+            }
+        } else if (mode === "name") {
+            setResults([]);
+            setPage(1);
+            setHasMore(true);
+            fetchPage(1);
         }
     }
+
+    // Infinite scroll observer
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (entries[0].isIntersecting && hasMore && !loading) {
+                    setPage((prev) => prev + 1);
+                }
+            },
+            { rootMargin: "200px" }
+        );
+
+        if (loaderRef.current) observer.observe(loaderRef.current);
+
+        return () => observer.disconnect();
+    }, [hasMore, loading]);
+
+    // fetch new page when `page` increments
+    useEffect(() => {
+        if (page > 1) fetchPage(page);
+    }, [page]);
 
     return (
         <PokedexShell showBack>
@@ -41,48 +80,39 @@ export default function SearchFormItem() {
                 </h1>
 
                 {results.length === 0 ? (
-                    <>
-                        <form
-                            onSubmit={handleSubmit}
-                            className="flex flex-col items-center gap-4 bg-gray-100 border-4 border-gray-400 rounded-xl shadow-lg p-6 w-full max-w-lg"
+                    // Search form
+                    <form
+                        onSubmit={handleSubmit}
+                        className="flex flex-col items-center gap-4 bg-gray-100 border-4 border-gray-400 rounded-xl shadow-lg p-6 w-full max-w-lg"
+                    >
+                        <input
+                            type="text"
+                            placeholder={
+                                mode === "id"
+                                    ? "Enter Item ID..."
+                                    : "Enter Item name..."
+                            }
+                            value={query}
+                            onChange={(e) => setQuery(e.target.value)}
+                            className="flex-1 p-3 font-pokemon border-2 border-gray-400 rounded-md 
+                focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-800"
+                        />
+                        <button
+                            type="submit"
+                            className="px-6 py-3 bg-red-600 text-white font-pokemon text-lg 
+                rounded-full border-4 border-red-800 shadow-md 
+                hover:bg-red-700 hover:scale-105 transition-transform"
                         >
-                            <input
-                                type="text"
-                                placeholder={
-                                    mode === "id"
-                                        ? "Enter Item ID..."
-                                        : "Enter Item name..."
-                                }
-                                value={query}
-                                onChange={(e) => setQuery(e.target.value)}
-                                className="flex-1 p-3 font-pokemon border-2 border-gray-400 rounded-md 
-                           focus:outline-none focus:ring-2 focus:ring-red-500 text-gray-800"
-                            />
-
-                            <button
-                                type="submit"
-                                className="px-6 py-3 bg-red-600 text-white font-pokemon text-lg 
-                           rounded-full border-4 border-red-800 shadow-md 
-                           hover:bg-red-700 hover:scale-105 transition-transform"
-                            >
-                                Go!
-                            </button>
-                        </form>
-
-                        <p className="text-xs text-gray-600 font-pokemon italic">
-                            {mode === "id" &&
-                                "🔎 Search by Item National ID (1–18)"}
-                            {mode === "name" &&
-                                "🔎 Search by Item name (e.g. Fire)"}
-                        </p>
-                    </>
+                            Go!
+                        </button>
+                    </form>
                 ) : (
                     <div className="bg-white border-4 border-gray-300 rounded-xl shadow-lg p-4 w-full max-w-lg flex flex-col">
                         <h2 className="text-lg font-pokemon mb-3 text-gray-800">
                             Results
                         </h2>
-                        <div className="flex-1  pr-2">
-                            {results.map((item: ItemsRes) => (
+                        <div className="flex-1 pr-2">
+                            {results.map((item) => (
                                 <button
                                     key={item.apiId}
                                     onClick={() =>
@@ -92,31 +122,30 @@ export default function SearchFormItem() {
                                     }
                                     className="w-full flex items-center gap-3 p-2 rounded-md hover:bg-gray-100 transition cursor-pointer"
                                 >
-                                    <Image
-                                        src={item.data.sprites.default}
-                                        alt={item.name}
-                                        width={40}
-                                        height={40}
-                                    />
+                                    {item.data.sprites?.default ? (
+                                        <Image
+                                            src={item.data.sprites.default}
+                                            alt={item.name}
+                                            width={40}
+                                            height={40}
+                                        />
+                                    ) : (
+                                        <div className="w-10 h-10 bg-gray-200 rounded-md flex items-center justify-center">
+                                            ❓
+                                        </div>
+                                    )}
                                     <span className="capitalize font-pokemon text-gray-800">
                                         {item.name}
                                     </span>
                                 </button>
                             ))}
                         </div>
-
-                        <div className="mt-4 flex justify-center">
-                            <button
-                                onClick={() => {
-                                    setResults([]);
-                                    setQuery("");
-                                }}
-                                className="px-4 py-2 bg-gray-200 text-gray-800 font-pokemon 
-                           rounded-md border-2 border-gray-400 
-                           hover:bg-gray-300 transition"
-                            >
-                                ← Back to Search
-                            </button>
+                        <div
+                            ref={loaderRef}
+                            className="h-12 flex items-center justify-center font-pokemon"
+                        >
+                            {loading && <span>Loading more…</span>}
+                            {!hasMore && <span>No more results</span>}
                         </div>
                     </div>
                 )}
