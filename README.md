@@ -1,36 +1,104 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🎮 Pokédex App
 
-## Getting Started
+A modern **full-stack Pokémon web application** built with **Next.js 15, TypeScript, Tailwind CSS, and MongoDB**.  
+The app lets users explore and search Pokémon, catch and release them into their personal Pokédex, and discover types, evolutions, and items — all in a clean, responsive, and animated UI.
 
-First, run the development server:
+![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white)
+![NextAuth](https://img.shields.io/badge/Auth-NextAuth.js-blue?style=for-the-badge)
+
+---
+
+## 🚀 Features
+
+### 🔎 Pokémon Explorer
+
+-   Browse through all Pokémon (1–1010) with **infinite scroll**
+-   Detailed Pokémon pages with stats, sprites, type effectiveness, and evolutions
+
+### 📖 Personal Pokédex
+
+-   **Catch and release Pokémon** to build your own collection
+-   Synced to user accounts via **NextAuth authentication**
+
+### 🔍 Search System
+
+-   Search Pokémon by **name or ID**
+-   Search **Items** and **Types** with infinite scroll and detail pages
+
+### ⚔️ Type Effectiveness
+
+-   View type matchups (**weaknesses, resistances, strengths**)
+-   Dynamic, color-coded type badges
+
+### 🎒 Items & Effects
+
+-   Explore Pokémon items with sprites, effect descriptions, and flavor texts
+
+### ✨ Modern UI/UX
+
+-   Fully responsive **mobile-first design**
+-   Smooth animations with **Framer Motion**
+-   Custom design system with **Shadcn UI**
+
+---
+
+## 🖼️ Screenshots
+
+### Home Page / Pokédex Grid
+
+![Pokédex Grid](./public/screenshots/grid.png)
+
+### Pokémon Detail Page
+
+![Pokémon Detail](./public/screenshots/detail1.png)
+![Pokémon Detail](./public/screenshots/detail2.png)
+![Pokémon Detail](./public/screenshots/detail3.png)
+![Pokémon Detail](./public/screenshots/detail4.png)
+
+### Personal Pokédex
+
+![Personal Pokédex](./public//screenshots/party.png)
+
+### Item Search
+
+![Item Search](./public//screenshots/search.png)
+
+---
+
+## 🛠️ Tech Stack
+
+**Frontend**
+
+-   Next.js 15 (App Router, Server Actions, Server/Client Components)
+-   React 19 + TypeScript
+-   Tailwind CSS + custom design system
+-   Framer Motion for animations
+-   Shadcn UI for UI primitives
+
+**Backend**
+
+-   MongoDB with Mongoose models
+-   NextAuth.js for authentication
+-   PokeAPI as data source (seeded into local DB)
+
+**Deployment**
+
+-   Vercel for frontend hosting
+-   MongoDB Atlas / custom DB deployment
+
+---
+
+## 📦 Installation & Setup
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# 1. Clone the repository
+git clone https://github.com/yourusername/pokedex.git
+cd pokedex
+
+# 2. Install dependencies
+npm install
 ```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
