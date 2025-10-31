@@ -20,7 +20,7 @@ export default function Navbar() {
     ];
 
     return (
-        <div className=" font-pokemon">
+        <div className="relative font-pokemon">
             <Image
                 src="/NicePng_kanto-badges-png_3680351.png"
                 alt="poks"
@@ -30,7 +30,7 @@ export default function Navbar() {
             />
             <Ash />
             <motion.nav
-                className=" bg-pink-400 text-white shadow-lg md:w-2xl sm:w-xl mx-auto mt-35 rounded-3xl relative z-20"
+                className="relative bg-pink-400 text-white shadow-lg md:w-2xl sm:w-xl mx-auto mt-35 rounded-3xl relative z-20"
                 animate={{ rotate: [0, -0.3, 0.3, 0] }}
                 transition={{
                     duration: 6,
@@ -41,12 +41,11 @@ export default function Navbar() {
                 <Image
                     src="/Pokemon.svg"
                     alt="Pokemon Logo"
-                    width={70}
-                    height={70}
-                    className="absolute -top-8 right-8 sm:right-10 md:right-12 z-30"
+                    width={80}
+                    height={80}
+                    className="absolute -top-15 left-4/5 -translate-x-1/3 z-10"
                     priority
                 />
-
                 <div className="mx-auto max-w-6xl px-4">
                     <div className="flex justify-between items-center h-16">
                         <motion.div
