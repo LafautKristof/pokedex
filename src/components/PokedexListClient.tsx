@@ -1,16 +1,15 @@
+"use client";
 import { releasePokemon } from "@/app/actions/pokedex";
-import { getMyPokemonsInfo } from "@/app/queries/pokedex";
-import { Pokedex as PokedexType } from "@/app/types/PokemonTypes";
+
+import { Pokedex as PokedexType, PokemonRes } from "@/app/types/PokemonTypes";
 import Link from "next/link";
 import Image from "next/image";
 
-const PokedexListClient = async ({ pokedex }: { pokedex: PokedexType[] }) => {
-    const ids = pokedex.map((p) => Number(p.pokemonId));
-    const myPokemons = await getMyPokemonsInfo(ids);
-
+const PokedexListClient = ({ myPokemons }: { myPokemons: PokemonRes[] }) => {
     return (
         <>
-            <div className="w-full sticky top-0 z-10 bg-gray-200 flex flex-wrap gap-[1vw] justify-around items-center">
+            {/* ✅ Responsive container */}
+            <div className="w-full sticky top-0 z-10 bg-gray-200 flex flex-wrap gap-2 sm:gap-4 justify-center items-center p-2 sm:p-4">
                 {myPokemons.map((pokemon, i) => {
                     const sprite =
                         pokemon.data.sprites.other["official-artwork"]
@@ -21,9 +20,10 @@ const PokedexListClient = async ({ pokedex }: { pokedex: PokedexType[] }) => {
                     return (
                         <div
                             key={pokemon.apiId ?? i}
-                            className="w-[6vw] h-[6vw] rounded-full 
-              bg-[radial-gradient(circle_at_center,white_40%,#ef4444_100%)] 
-              border-2 flex items-center justify-center"
+                            className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 
+                                rounded-full border-2 
+                                bg-[radial-gradient(circle_at_center,white_40%,#ef4444_100%)] 
+                                flex items-center justify-center shadow-sm hover:scale-105 transition-transform"
                         >
                             <Link href={`/pokedex/pokemon/${pokemon.apiId}`}>
                                 <Image
@@ -38,21 +38,31 @@ const PokedexListClient = async ({ pokedex }: { pokedex: PokedexType[] }) => {
                     );
                 })}
 
+                {/* ✅ Vul lege slots op met zelfde grootte */}
                 {Array.from({ length: 10 - myPokemons.length }).map((_, i) => (
                     <div
                         key={`empty-${i}`}
-                        className="w-[6vw] h-[6vw] rounded-full 
-            bg-[radial-gradient(circle_at_center,white_40%,#ef4444_100%)] 
-            border-2 flex flex-col items-center justify-center"
+                        className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 
+                            rounded-full border-2 
+                            bg-[radial-gradient(circle_at_center,white_40%,#ef4444_100%)] 
+                            opacity-30 flex items-center justify-center"
                     />
                 ))}
             </div>
-            <div className="bg-blue">
+
+            {/* ✅ Optioneel: release-knop */}
+            <div className="bg-blue-500 text-center py-4">
                 <form action={releasePokemon}>
-                    <button type="submit"></button>
+                    <button
+                        type="submit"
+                        className="text-white px-4 py-2 rounded-md shadow-md hover:bg-blue-600 transition"
+                    >
+                        Release Pokémon
+                    </button>
                 </form>
             </div>
         </>
     );
 };
+
 export default PokedexListClient;

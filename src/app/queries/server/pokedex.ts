@@ -1,6 +1,6 @@
-import { connectDB } from "../lib/mongo";
-import Pokemon from "../models/Pokemon";
-import { PokemonRes } from "../types/PokemonTypes";
+import { connectDB } from "../../lib/mongo";
+import Pokemon from "../../models/Pokemon";
+import { PokemonRes } from "../../types/PokemonTypes";
 
 export async function getMyPokemonsInfo(
     pokemonIds: number[]

@@ -23,6 +23,7 @@ export default function FallingPsyduck() {
                 width={100}
                 height={100}
                 style={{ transform: "rotate(180deg)" }}
+                priority
             />
         </motion.div>
     );

@@ -4,7 +4,7 @@ import { ItemsRes } from "@/app/types/ItemsTypes";
 import PokedexShell from "@/components/PokedexShell";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function SearchFormItem() {
     const router = useRouter();

@@ -4,7 +4,6 @@ import "./globals.css";
 import Navbar from "@/components/NavBar";
 import localFont from "next/font/local";
 import Providers from "@/components/Providers";
-import Image from "next/image";
 import FallingPsyduck from "@/components/Psyduck";
 import Ash from "@/components/Ash";
 

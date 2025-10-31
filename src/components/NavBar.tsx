@@ -36,7 +36,7 @@ export default function Navbar() {
                 className="absolute -top-13 left-2/5 -translate-x-1/3 z-10"
             />
             <motion.nav
-                className="bg-pink-400 text-white shadow-lg w-2xl mx-auto mt-35 rounded-3xl relative z-20"
+                className="bg-pink-400 text-white shadow-lg md:w-2xl sm:w-xl mx-auto mt-35 rounded-3xl relative z-20"
                 animate={{ rotate: [0, -0.3, 0.3, 0] }}
                 transition={{
                     duration: 6,
