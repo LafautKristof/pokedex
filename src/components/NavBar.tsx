@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import LogoutButton from "./LogoutButton";
 import { useSession } from "next-auth/react";
+import Ash from "./Ash";
 
 export default function Navbar() {
     const [open, setOpen] = useState(false);
@@ -21,22 +22,15 @@ export default function Navbar() {
     return (
         <div className="relative font-pokemon">
             <Image
-                src="/Pokemon.svg"
-                alt="Pokemon Logo"
-                width={80}
-                height={80}
-                className="absolute -top-15 left-3/5 -translate-x-1/3 z-10"
-                priority
-            />
-            <Image
                 src="/NicePng_kanto-badges-png_3680351.png"
                 alt="poks"
                 width={100}
                 height={100}
                 className="absolute -top-13 left-2/5 -translate-x-1/3 z-10"
             />
+            <Ash />
             <motion.nav
-                className="bg-pink-400 text-white shadow-lg md:w-2xl sm:w-xl mx-auto mt-35 rounded-3xl relative z-20"
+                className="relative bg-pink-400 text-white shadow-lg md:w-2xl sm:w-xl mx-auto mt-35 rounded-3xl relative z-20"
                 animate={{ rotate: [0, -0.3, 0.3, 0] }}
                 transition={{
                     duration: 6,
@@ -44,9 +38,16 @@ export default function Navbar() {
                     ease: "easeInOut",
                 }}
             >
+                <Image
+                    src="/Pokemon.svg"
+                    alt="Pokemon Logo"
+                    width={80}
+                    height={80}
+                    className="absolute -top-15 left-4/5 -translate-x-1/3 z-10"
+                    priority
+                />
                 <div className="mx-auto max-w-6xl px-4">
                     <div className="flex justify-between items-center h-16">
-                        {/* Logo Pokéball */}
                         <motion.div
                             animate={{ rotate: [0, -5, 5, 0] }}
                             transition={{
@@ -63,7 +64,6 @@ export default function Navbar() {
                             />
                         </motion.div>
 
-                        {/* Tekstlogo */}
                         <Link
                             href="/"
                             className="flex items-center gap-2 font-bold text-xl"
@@ -76,7 +76,6 @@ export default function Navbar() {
                             />
                         </Link>
 
-                        {/* Desktop links */}
                         <div className="hidden md:flex space-x-6 items-center">
                             {links.map((link) => (
                                 <Link
@@ -108,7 +107,6 @@ export default function Navbar() {
                             )}
                         </div>
 
-                        {/* Mobile menu button */}
                         <button
                             onClick={() => setOpen(!open)}
                             className="md:hidden text-white"
@@ -117,8 +115,6 @@ export default function Navbar() {
                         </button>
                     </div>
                 </div>
-
-                {/* Mobile menu */}
                 {open && (
                     <div className="md:hidden bg-red-700 px-4 pb-4 space-y-2">
                         {links.map((link) => (

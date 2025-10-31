@@ -28,11 +28,7 @@ export default function RootLayout({
             <body className={`${pokemonFont.variable} bg-blue-300`}>
                 <Providers>
                     {" "}
-                    <Navbar />{" "}
-                    <div className="relative">
-                        <Ash />
-                        {children}
-                    </div>
+                    <Navbar /> <div className="relative">{children}</div>
                     <FallingPsyduck />
                 </Providers>
             </body>

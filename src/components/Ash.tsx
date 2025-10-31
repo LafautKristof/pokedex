@@ -2,7 +2,7 @@ import Image from "next/image";
 
 const Ash = () => {
     return (
-        <div className="absolute -top-50 left-1/7 -translate-x-1/2 ">
+        <div className="absolute -bottom-10 left-1/7 -translate-x-1/2 -z-50">
             <Image
                 src="/Ash_Ketchum_Journeys.png"
                 alt="ash"

@@ -19,10 +19,10 @@ const page = async () => {
         });
         if (pokemonCount === 0) {
             message = "You haven’t caught any Pokémon yet!";
-        } else if (pokemonCount < 10) {
+        } else if (pokemonCount < 12) {
             message = `You’ve caught ${pokemonCount} Pokémon so far. Keep going!`;
         } else {
-            message = "You can’t catch more than 10 Pokémon right now!";
+            message = "You can’t catch more than 12 Pokémon right now!";
         }
     } else {
         redirect("/login");

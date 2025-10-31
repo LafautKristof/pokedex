@@ -39,7 +39,7 @@ const PokedexListClient = ({ myPokemons }: { myPokemons: PokemonRes[] }) => {
                 })}
 
                 {/* ✅ Vul lege slots op met zelfde grootte */}
-                {Array.from({ length: 10 - myPokemons.length }).map((_, i) => (
+                {Array.from({ length: 12 - myPokemons.length }).map((_, i) => (
                     <div
                         key={`empty-${i}`}
                         className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 
@@ -48,18 +48,6 @@ const PokedexListClient = ({ myPokemons }: { myPokemons: PokemonRes[] }) => {
                             opacity-30 flex items-center justify-center"
                     />
                 ))}
-            </div>
-
-            {/* ✅ Optioneel: release-knop */}
-            <div className="bg-blue-500 text-center py-4">
-                <form action={releasePokemon}>
-                    <button
-                        type="submit"
-                        className="text-white px-4 py-2 rounded-md shadow-md hover:bg-blue-600 transition"
-                    >
-                        Release Pokémon
-                    </button>
-                </form>
             </div>
         </>
     );

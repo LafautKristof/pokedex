@@ -27,27 +27,32 @@ const PokemonCard = ({
 }: PokemonCardProps) => {
     return (
         <div
-            className=" relative bg-gray-300 rounded-xl shadow p-4 flex flex-col justify-between items-center 
-                w-full border-4 border-gray-400 hover:cursor-pointer hover:animate-pulse min-h-[350px] mb-5"
+            className="relative bg-gray-300 rounded-xl shadow-md border-4 border-gray-400 
+                 hover:cursor-pointer hover:shadow-lg hover:scale-[1.02] transition-transform 
+                 flex flex-col justify-between items-center p-3 sm:p-4 w-full h-full"
         >
-            <div>
+            <div className="flex flex-col items-center text-center w-full">
                 <Link href={`/pokedex/pokemon/${pokemon.apiId}`}>
-                    <Image
-                        src={getSprite(pokemon)}
-                        alt={pokemon.name}
-                        width={200}
-                        height={200}
-                    />
+                    <div className="w-full flex justify-center">
+                        <Image
+                            src={getSprite(pokemon)}
+                            alt={pokemon.name}
+                            width={160}
+                            height={160}
+                            className="object-contain sm:w-40 sm:h-40 w-28 h-28"
+                        />
+                    </div>
                 </Link>
-                <span className="capitalize mt-2 font-bold text-black font-pokemon ">
+
+                <span className="capitalize mt-2 font-bold text-black font-pokemon text-sm sm:text-base md:text-lg">
                     {pokemon.name}
                 </span>
 
-                <div className="flex gap-2 mt-2 mb-8">
+                <div className="flex flex-wrap justify-center gap-2 mt-2 mb-4">
                     {pokemon.data.types.map((t) => (
                         <span
                             key={t.type.name}
-                            className={`px-2 py-1 text-xs rounded capitalize text-white font-pokemon ${getTypeBadgeColor(
+                            className={`px-2 py-1 text-[10px] sm:text-xs md:text-sm rounded capitalize text-white font-pokemon ${getTypeBadgeColor(
                                 t.type.name
                             )}`}
                         >
@@ -56,6 +61,7 @@ const PokemonCard = ({
                     ))}
                 </div>
             </div>
+
             <form
                 action={async (fd) => {
                     if (caught) {
@@ -66,13 +72,15 @@ const PokemonCard = ({
                         onCatch?.();
                     }
                 }}
+                className="w-full flex justify-center"
             >
                 <input type="hidden" name="id" value={pokemon.apiId} />
                 <input type="hidden" name="userId" value={userId ?? ""} />
                 <PokemonButton caught={caught} disabled={disableCatch} />
             </form>
-            <div className="absolute flex top-2 right-2">
-                <p className="font-pokemon"> #{pokemon.apiId}</p>
+
+            <div className="absolute top-2 right-2 text-xs  sm:text-sm md:text-base font-pokemon">
+                #{pokemon.apiId}
             </div>
         </div>
     );
